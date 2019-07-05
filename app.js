@@ -8,7 +8,9 @@ const app = express();
 const adminData = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
-app.engine('hbs', handleBars({ defaultLayout: false }));
+app.engine('hbs', handleBars({
+    extname: 'hbs'
+}));
 // app.set('view engine', 'pug');
 app.set('view engine', 'hbs');
 app.set('views', 'views');

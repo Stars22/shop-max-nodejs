@@ -1,6 +1,6 @@
 const Product = require('../models/product');
 const getAddProductPage = (req, res, next) => {
-    res.render('add-product', {
+    res.render('admin/add-product', {
         pageTitle: 'Add Product',
         path: '/admin/add-product',
         formsCSS: true,
@@ -18,7 +18,7 @@ const postAddProductPage = (req, res) => {
 const getProductsPage = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     Product.fetchAll((products) => {
-        res.render('shop', {
+        res.render('shop/product-list', {
             products,
             pageTitle: 'Max shop',
             hasProducts: products.length > 0,

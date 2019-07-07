@@ -1,5 +1,5 @@
-const products = [];
-
+const Product = require('../models/product');
+debugger
 const getAddProductPage = (req, res, next) => {
     res.render('add-product', {
         pageTitle: 'Add Product',
@@ -11,12 +11,14 @@ const getAddProductPage = (req, res, next) => {
 };
 
 const postAddProductPage = (req, res) => {
-    products.push({title: req.body.title});
+    const product = new Product(req.body.title);
+    product.save();
     res.redirect('/');
 };
 
 const getProductsPage = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
+    const products = Product.fetchAll();
     res.render('shop', {
         products,
         pageTitle: 'Max shop',

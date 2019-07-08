@@ -11,6 +11,10 @@ const getProductsPage = (req, res, next) => {
     });
 };
 
+const getProductPage = (req, res, next) => {
+    const prodId = req.params.productId;
+};
+
 const getIndexPage = (req, res, next) => {
     Product.fetchAll((products) => {
         res.render('shop/index', {
@@ -45,6 +49,7 @@ const getCheckoutPage = (req, res, next) => {
 
 module.exports = {
     getProductsPage,
+    getProductPage,
     getIndexPage,
     getCartPage,
     getCheckoutPage,

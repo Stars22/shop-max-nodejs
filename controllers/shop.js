@@ -13,6 +13,11 @@ const getProductsPage = (req, res, next) => {
 
 const getProductPage = (req, res, next) => {
     const prodId = req.params.productId;
+    Product.findProduct(prodId, product => {
+        res.render('shop/product-detail', {
+            path: '/products'
+        });
+    });
 };
 
 const getIndexPage = (req, res, next) => {

@@ -32,4 +32,4 @@ module.exports = {
     getAddProductPage,
     postAddProductPage,
     getProductsPage
-}
+};

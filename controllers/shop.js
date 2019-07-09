@@ -15,7 +15,9 @@ const getProductPage = (req, res, next) => {
     const prodId = req.params.productId;
     Product.findProduct(prodId, product => {
         res.render('shop/product-detail', {
-            path: '/products'
+            product,
+            pageTitle: product.title,
+            path: '/products' 
         });
     });
 };

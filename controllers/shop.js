@@ -53,6 +53,11 @@ const getCheckoutPage = (req, res, next) => {
     });
 };
 
+const postCartPage = (req, res, next) => {
+    const prodId = req.body.productId;
+    res.redirect('/cart');
+};
+
 
 module.exports = {
     getProductsPage,
@@ -60,5 +65,6 @@ module.exports = {
     getIndexPage,
     getCartPage,
     getCheckoutPage,
-    getOrdersPage
-}
+    getOrdersPage,
+    postCartPage
+};

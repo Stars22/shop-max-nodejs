@@ -10,4 +10,6 @@ router.get('/products/:productId', shopController.getProductPage);
 router.get('/cart', shopController.getCartPage);
 router.get('/orders', shopController.getOrdersPage);
 router.get('/checkout', shopController.getCheckoutPage);
+
+router.post('/cart', shopController.postCartPage);
 module.exports = router;

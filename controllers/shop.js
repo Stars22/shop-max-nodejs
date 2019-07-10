@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const Cart = require('../models/cart');
 
 const getProductsPage = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
@@ -55,6 +56,9 @@ const getCheckoutPage = (req, res, next) => {
 
 const postCartPage = (req, res, next) => {
     const prodId = req.body.productId;
+    Product.findProduct(prodId, product => {
+        Cart.addProduct(prodId, product.price);
+    });
     res.redirect('/cart');
 };
 

@@ -27,6 +27,12 @@ exports.getEditProductPage = (req, res, next) => {
     });
 };
 
+exports.postDeleteProduct = (req, res) => {
+    const prodId = req.body.id;
+    Product.delete(prodId);
+    res.redirect('/products');
+};
+
 exports.postAddProductPage = (req, res) => {
     const { title, imageUrl, price, description } = req.body;
     const product = new Product(title, imageUrl, description, price);

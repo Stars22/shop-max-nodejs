@@ -39,6 +39,7 @@ module.exports = class Cart {
       fs.writeFile(p, JSON.stringify(cart), err => console.log(err));
     });
   }
+
   static removeProduct(id, price) {
     fs.readFile(p, (err, data) => {
       const cart = JSON.parse(data);
@@ -47,6 +48,17 @@ module.exports = class Cart {
       const updatedproducts = cart.products.filter(product => product.id !== id);
       const updatedCart = { products: updatedproducts, totalPrice };
       fs.writeFile(p, JSON.stringify(updatedCart), err => console.log(err));
+    });
+  }
+
+  static showCart(cb) {
+    fs.readFile(p, (err, data) => {
+      if(err || data.length < 1) {
+        cb(null);
+      } else {
+        const cart = JSON.parse(data);
+        cb(cart);
+      }
     });
   }
 };

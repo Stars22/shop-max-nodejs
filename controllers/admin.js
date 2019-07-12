@@ -34,6 +34,11 @@ exports.postAddProductPage = (req, res) => {
     res.redirect('/');
 };
 
+exports.postEditProductPage = (req, res) => {
+    const { title, imageUrl, price, description } = req.body;
+    res.redirect('/');
+};
+
 exports.getProductsPage = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     Product.fetchAll((products) => {

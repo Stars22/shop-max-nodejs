@@ -4,10 +4,16 @@
     <body>
         <%- include('../includes/navigation.ejs') %>
         <main>
-            <% if( cartProducts ) { %>
+            <% if( cartProducts > 0) { %>
             <ul>
                 <% for(product of cartProducts) { %>
-                    <li><%= product.title %> (<%=product.qty %>)</li>
+                    <li>
+                        <p><%= product.title %> (<%=product.qty %>)</p>
+                        <form action="/cart-delete-item" method="post">
+                            <input type="hidden" name="productId" value="<%= product.id %>">
+                            <button class="btn" type="submit">Delete</button>
+                        </form>
+                    </li>
                 <% } %>
             </ul>
             <% } else { %>

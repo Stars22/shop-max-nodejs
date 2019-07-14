@@ -1,67 +1,16 @@
-const fs = require('fs');
-const path = require('path');
-const Cart = require('./cart');
+const { getDb } = require('../util/database');
 
-const p = path.join(
-    path.dirname(process.mainModule.filename),
-    'data',
-    'products.json'
-);
-
-const getProductsFromFile = (cb) => {   
-    fs.readFile(p, (err, data) => {
-        let products = [];
-        if(!err) {
-            products = JSON.parse(data);
-        }
-        cb(products);
-    });
-};
-
-module.exports = class Product {
-    constructor(title, imageUrl, description, price, id = null) {
-        this.id = id;
+class Product {
+    constructor(title, price, description, imageUrl) {
         this.title = title;
-        this.imageUrl = imageUrl;
-        this.description = description;
         this.price = price;
+        this.description = description;
+        this.imageUrl = imageUrl;
     }
 
     save() {
-        getProductsFromFile((products) => {
-            let updatedProducts;
-            if(this.id) { 
-                const existingProductIndex = products.findIndex(product => product.id === this.id);
-                updatedProducts = [...products];
-                updatedProducts[existingProductIndex] = this;
-            } else {
-                this.id = Math.random().toString();
-                updatedProducts = products.concat(this);
-            }
-            fs.writeFile(p, JSON.stringify(updatedProducts), err => console.log(err));
-        });
-    }
 
-    static delete(id) {
-        getProductsFromFile((products) => {
-            const product = products.find(product => product.id === id);
-            const updatedProducts = products.filter(product => product.id !== id);
-            fs.writeFile(p, JSON.stringify(updatedProducts), err => {
-                if(!err) {
-                    Cart.removeProduct(id, product.price);
-                }
-            });
-        });
     }
+}
 
-    static fetchAll(cb) {
-        getProductsFromFile(cb);
-    }
-
-    static findProduct(id, cb) {
-        getProductsFromFile(products =>{
-            const product = products.find(prod => prod.id === id);
-            cb(product);
-        });
-    }
-};
+module.exports = Product;

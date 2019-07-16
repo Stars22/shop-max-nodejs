@@ -1,19 +1,25 @@
 const { getDb } = require('../util/database');
-const mongodb = require('mongodb');
+const { ObjectID } = require('mongodb');
 
 class Product {
-    constructor(title, imageUrl, description, price) {
+    constructor(title, imageUrl, description, price, id = null) {
         this.title = title;
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
+        this._id = ObjectID(id);
     }
 
     save() {
         const db = getDb();
-        return db.collection('products').insertOne(this)
-        .then(result => console.log(result))
-        .catch(err => console.log(err));
+        if(this._id) {
+            return db.collection('products').updateOne({_id: ObjectID(this._id)}, {$set: this})
+            .then(result => console.log(result));
+        } else {
+            return db.collection('products').insertOne(this)
+            .then(result => console.log(result))
+            .catch(err => console.log(err));
+        } 
     }
 
     static fetchAll() {
@@ -27,7 +33,7 @@ class Product {
 
     static findProduct(prodId) {
         const db = getDb();
-        return db.collection('products').find({_id: mongodb.ObjectID(prodId)}).next()
+        return db.collection('products').find({_id: ObjectID(prodId)}).next()
         .then(product =>{
             console.log(product);
             return product;

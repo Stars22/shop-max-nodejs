@@ -13,7 +13,7 @@ class Product {
     save() {
         const db = getDb();
         if(this._id) {
-            return db.collection('products').updateOne({_id: ObjectID(this._id)}, {$set: this})
+            return db.collection('products').updateOne({_id: this._id}, {$set: this})
             .then(result => console.log(result));
         } else {
             return db.collection('products').insertOne(this)

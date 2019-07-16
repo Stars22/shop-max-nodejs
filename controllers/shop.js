@@ -3,18 +3,21 @@ const Cart = require('../models/cart');
 
 const getProductsPage = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-    Product.fetchAll((products) => {
+    Product.fetchAll()
+    .then(products => {
         res.render('shop/product-list', {
             products,
             pageTitle: 'All products',
             path: '/products',
         });
-    });
+    })
+    .catch(err => console.log(err));
 };
 
 const getProductPage = (req, res, next) => {
     const prodId = req.params.productId;
-    Product.findProduct(prodId, product => {
+    Product.findProduct(prodId)
+    .then(product => {
         res.render('shop/product-detail', {
             product,
             pageTitle: product.title,

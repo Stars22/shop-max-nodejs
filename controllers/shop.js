@@ -24,13 +24,15 @@ const getProductPage = (req, res, next) => {
 };
 
 const getIndexPage = (req, res, next) => {
-    Product.fetchAll((products) => {
+    Product.fetchAll()
+    .then(products => {
         res.render('shop/index', {
             products,
             pageTitle: 'Max shop',
             path: '/',
         });
-    });
+    })
+    .catch(err => console.log(err));
 };
 
 const getCartPage = (req, res, next) => {

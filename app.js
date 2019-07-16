@@ -10,7 +10,7 @@ const errorController = require('./controllers/errors');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
-const mongoConnect = require('./util/database');
+const { mongoConnect } = require('./util/database');
 // app.engine('hbs', handleBars({
 //     extname: 'hbs'
 // }));
@@ -29,3 +29,4 @@ app.use(errorController.get404Page);
 mongoConnect(() => {
     app.listen(3000);
 });
+

@@ -94,9 +94,8 @@ const postCartPage = (req, res, next) => {
     Product.findProduct(prodId)
         .then(product => {
             return req.user.addToCart(product);
-        }).then()
+        }).then(_ => res.redirect('/cart'))
         .catch(err => console.log(err));
-    res.redirect('/cart');
 };
 
 const postCartDeleteProduct = (req, res, next) => {

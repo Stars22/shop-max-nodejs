@@ -100,10 +100,8 @@ const postCartPage = (req, res, next) => {
 
 const postCartDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId;
-    Product.findProduct(prodId, product => {
-        Cart.removeProduct(prodId, product.price);
-        res.redirect('/cart');
-    });
+    req.user.deleteItemFromCart(prodId)
+        .then(_ => res.redirect('/cart'));
 };
 
 

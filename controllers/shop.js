@@ -85,7 +85,7 @@ const postCartPage = (req, res, next) => {
     Product.findProduct(prodId)
         .then(product => {
             return req.user.addToCart(product);
-        }).then(result => console.log(result))
+        }).then()
         .catch(err => console.log(err));
     res.redirect('/cart');
 };

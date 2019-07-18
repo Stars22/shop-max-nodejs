@@ -12,16 +12,27 @@ class User {
     save() {
         const db = getDb();
         return db.collection('users').insertOne(this)
-        .then(result => console.log(result))
+        .then()
         .catch(err => console.log(err));
     }
 
     addToCart(product) {
-        // const cartProductIndex = this.cart.items.findIndex(cartProduct => {
-        //     return cartProduct._id === product._id;
-        // });
-        const updatedCart = { items: [{ productId: ObjectID(product._id), quantity: 1}] };
+        const cartProductIndex = this.cart.items.findIndex(cartProduct => {
+            return cartProduct.productId.toString() === product._id.toString();
+        });
+        let updatedCartItems =  [...this.cart.items];
+        let newQuantity = 1;
         const db = getDb();
+        if(cartProductIndex > -1) {
+            newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+            updatedCartItems[cartProductIndex].quantity = newQuantity;
+        } else {
+            updatedCartItems.push({
+                productId: ObjectID(product._id),
+                quantity: newQuantity
+            });
+        }
+        const updatedCart = { items: updatedCartItems };
         return db.collection('users').updateOne({_id: this._id}, {$set: { cart: updatedCart }});
     }
 
@@ -29,7 +40,6 @@ class User {
         const db = getDb();
         return db.collection('users').findOne({_id: ObjectID(id)})
         .then(result => {
-            console.log(result);
             return result;
         })
         .catch(err => console.log(err));

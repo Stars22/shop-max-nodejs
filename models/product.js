@@ -18,7 +18,7 @@ class Product {
             .then(result => console.log(result));
         } else {
             return db.collection('products').insertOne(this)
-            .then(result => console.log(result))
+            .then()
             .catch(err => console.log(err));
         } 
     }
@@ -36,7 +36,6 @@ class Product {
         const db = getDb();
         return db.collection('products').find({_id: ObjectID(prodId)}).next()
         .then(product =>{
-            console.log(product);
             return product;
         })
         .catch(err => console.log(err));
@@ -45,7 +44,7 @@ class Product {
     static delete(prodId) {
         const db = getDb();
         return db.collection('products').deleteOne({_id: ObjectID(prodId)})
-        .then(result => console.log(result))
+        .then()
         .catch(err => console.log(err));
     }
 }

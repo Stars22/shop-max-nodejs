@@ -89,6 +89,11 @@ const getCheckoutPage = (req, res, next) => {
     });
 };
 
+const postOrder = (req, res, next) => {
+    req.user.addOrder()
+    .then(_ => res.redirect('/orders'));
+};
+
 const postCartPage = (req, res, next) => {
     const prodId = req.body.productId;
     Product.findProduct(prodId)
@@ -113,5 +118,6 @@ module.exports = {
     getCheckoutPage,
     getOrdersPage,
     postCartPage,
-    postCartDeleteProduct
+    postCartDeleteProduct,
+    postOrder
 };

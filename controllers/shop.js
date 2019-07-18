@@ -39,31 +39,40 @@ const getIndexPage = (req, res, next) => {
 };
 
 const getCartPage = (req, res, next) => {
-    Cart.showCart(cart => {
-        if(cart) {
-            Product.fetchAll(products => {
-                const cartProducts = [];
-                for( let product of products ) {
-                    const cartProduct = 
-                        cart.products.find(cartProd => cartProd.id === product.id);
-                    if(cartProduct) {
-                        cartProducts.push({...product, qty: cartProduct.qty});
-                    }      
-                }
-                res.render('shop/cart', {
-                    pageTitle: 'Cart',
-                    path: '/cart',
-                    cartProducts
-                });
-            });
-        } else {
-            res.render('shop/cart', {
-                pageTitle: 'Cart',
-                path: '/cart',
-                cartProducts: null
-            });
-        }
+    req.user.getCart()
+    .then(cartProducts => {
+        console.log(cartProducts);
+        res.render('shop/cart', {
+            pageTitle: 'Cart',
+            path: '/cart',
+            cartProducts
+        });
     });
+    // Cart.showCart(cart => {
+    //     if(cart) {
+    //         Product.fetchAll(products => {
+    //             const cartProducts = [];
+    //             for( let product of products ) {
+    //                 const cartProduct = 
+    //                     cart.products.find(cartProd => cartProd.id === product.id);
+    //                 if(cartProduct) {
+    //                     cartProducts.push({...product, qty: cartProduct.qty});
+    //                 }      
+    //             }
+    //             res.render('shop/cart', {
+    //                 pageTitle: 'Cart',
+    //                 path: '/cart',
+    //                 cartProducts
+    //             });
+    //         });
+    //     } else {
+    //         res.render('shop/cart', {
+    //             pageTitle: 'Cart',
+    //             path: '/cart',
+    //             cartProducts: null
+    //         });
+    //     }
+    // });
 };
 
 const getOrdersPage = (req, res, next) => {

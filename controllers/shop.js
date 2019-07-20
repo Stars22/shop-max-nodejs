@@ -76,10 +76,14 @@ const getCartPage = (req, res, next) => {
 };
 
 const getOrdersPage = (req, res, next) => {
-    res.render('shop/orders', {
-        pageTitle: 'Orders',
-        path: '/orders',
-    });
+    req.user.getOrders()
+        .then(orders => {
+            res.render('shop/orders', {
+                pageTitle: 'Orders',
+                path: '/orders',
+                orders
+            });
+        });
 };
 
 const getCheckoutPage = (req, res, next) => {

@@ -50,13 +50,28 @@ class User {
             });
         });
     }
+
     addOrder() {
         const db = getDb();
-        return db.collection('orders').insertOne(this.cart)
+        return this.getCart()
+            .then(cart => {
+                const updatedCart = {
+                    items: cart,
+                    user: {
+                        id: this._id
+                    }
+                };
+                return db.collection('orders').insertOne(updatedCart);
+            })
         .then(_ => {
             this.cart = { items: []};
             return db.collection('users').updateOne({ _id: this._id }, { $set: { cart: this.cart }});
         });
+    }
+
+    getOrders() {
+        const db = getDb();
+        return db.collection('orders').find({'user.id': this._id}).toArray();
     }
 
     deleteItemFromCart(productId) {

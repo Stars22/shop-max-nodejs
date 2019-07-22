@@ -3,7 +3,7 @@ const Cart = require('../models/cart-file');
 
 const getProductsPage = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-    Product.fetchAll()
+    Product.find()
     .then(products => {
         res.render('shop/product-list', {
             products,
@@ -27,7 +27,7 @@ const getProductPage = (req, res, next) => {
 };
 
 const getIndexPage = (req, res, next) => {
-    Product.fetchAll()
+    Product.find()
     .then(products => {
         res.render('shop/index', {
             products,

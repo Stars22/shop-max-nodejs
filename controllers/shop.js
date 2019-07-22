@@ -16,7 +16,7 @@ const getProductsPage = (req, res, next) => {
 
 const getProductPage = (req, res, next) => {
     const prodId = req.params.productId;
-    Product.findProduct(prodId)
+    Product.findById(prodId)
     .then(product => {
         res.render('shop/product-detail', {
             product,

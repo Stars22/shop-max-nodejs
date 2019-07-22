@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const user = new Schema({
+const UserSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -18,7 +18,7 @@ const user = new Schema({
     }
 });
 
-module.exports = mongoose.model('User', user);
+module.exports = mongoose.model('User', UserSchema);
 // const { getDb } = require('../util/database');
 // const { ObjectID } = require('mongodb');
 

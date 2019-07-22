@@ -8,10 +8,10 @@ const product = new Schema({
     imageUrl: String,
     userId: {
         type: Schema.Types.ObjectId,
-        ref: 'User',
         required: true
     }
-});
+}, { toObject: { virtuals: true }});
+product.virtual('user', { ref: 'User', localField: 'userId', foreignField: '_id', justOne: true });
 
 module.exports = mongoose.model('Product', product);
 // const { getDb } = require('../util/database');

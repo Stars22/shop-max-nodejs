@@ -62,8 +62,11 @@ exports.postEditProductPage = (req, res) => {
 
 exports.getProductsPage = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-    Product.find()
+    Product.find({})
+    //.select('title price -id') filtering fields space separated (minus for excluding field)
+    .populate('user')
     .then(products => {
+        console.log('products: ', products[0].user.name);
         res.render('admin/products', {
             products,
             pageTitle: 'Admin products',

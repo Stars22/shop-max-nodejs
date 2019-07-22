@@ -14,7 +14,7 @@ exports.getEditProductPage = (req, res, next) => {
         res.redirect('/');
     }
     const prodId = req.params.productId;
-    Product.findProduct(prodId)
+    Product.findById(prodId)
     .then(product => {
         if(!product) {
             res.redirect('/');
@@ -48,14 +48,20 @@ exports.postAddProductPage = (req, res) => {
 exports.postEditProductPage = (req, res) => {
     console.log(req.body);
     const { title, imageUrl, price, description, id } = req.body;
-    const product = new Product(title, imageUrl, description, price, id);
-    product.save();
-    res.redirect('/products');
+    Product.findById(id)
+    .then(product => {
+        product.title = title;
+        product.imageUrl = imageUrl;
+        product.price = price;
+        product.description = description;
+        product.save();
+    })
+    .then(_ => res.redirect('/products'));
 };
 
 exports.getProductsPage = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-    Product.fetchAll()
+    Product.find()
     .then(products => {
         res.render('admin/products', {
             products,

@@ -13,7 +13,7 @@ const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 // const { mongoConnect } = require('./util/database');
-// const User = require('./models/user');
+const User = require('./models/user');
 // app.engine('hbs', handleBars({
 //     extname: 'hbs'
 // }));
@@ -25,14 +25,14 @@ app.set('views', 'views');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use((req, res, next) => {
-//     User.find('5d2ebae7fde6281b5ccba7e5')
-//         .then(user => {
-//             req.user = new User(user.name, user.email, user.cart, user._id);
-//             next();
-//         })
-//         .catch(err => console.log(err));
-// });
+app.use((req, res, next) => {
+    User.find({_id: '5d358c4f28936f1fac26b35d'})
+        .then(user => {
+            req.user = user;
+            next();
+        })
+        .catch(err => console.log(err));
+});
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
@@ -42,6 +42,19 @@ app.use(errorController.get404Page);
 //     app.listen(3000);
 // });
 mongoose.connect(process.env.API_URL,  { useNewUrlParser: true })
-    .then(_ => app.listen(3000))
+    .then(_ => {
+        User.findOne()
+            .then(user => {
+                if(!user) {
+                    const user = new User({
+                        name: 'Ace',
+                        email: 'mail@gmail.com',
+                        cart: { items: []}
+                    });
+                    user.save();
+                }
+                app.listen(3000);
+            });
+    })
     .catch(err => console.log(err));
 

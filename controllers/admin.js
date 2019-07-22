@@ -30,8 +30,8 @@ exports.getEditProductPage = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res) => {
     const prodId = req.body.id;
-    Product.delete(prodId);
-    res.redirect('/products');
+    Product.findOneAndDelete(prodId)
+        .then(_ => res.redirect('/products'));
 };
 
 exports.postAddProductPage = (req, res) => {

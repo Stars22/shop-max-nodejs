@@ -36,7 +36,8 @@ exports.postDeleteProduct = (req, res) => {
 
 exports.postAddProductPage = (req, res) => {
     const { title, imageUrl, price, description} = req.body;
-    const product = new Product({ title, imageUrl, description, price });
+    const userId = req.user._id;
+    const product = new Product({ title, imageUrl, description, price, userId });
     product.save()
     .then(result => {
         console.log('Product was created');

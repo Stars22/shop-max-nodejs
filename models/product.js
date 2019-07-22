@@ -1,12 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const product = new Schema('product', {
+const product = new Schema({
     title: { type: String, required: true },
     price: { type: Number, required: true},
     description: String,
     imageUrl: String
 });
+
+module.exports = mongoose.model('Product', product);
 // const { getDb } = require('../util/database');
 // const { ObjectID } = require('mongodb');
 

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Product = require('../models/product');
 
 const UserSchema = new Schema({
     name: {
@@ -17,6 +18,28 @@ const UserSchema = new Schema({
         }]
     }
 });
+
+UserSchema.methods.addToCart = function(product) {
+    const cartProductIndex = this.cart.items.findIndex(cartProduct => {
+        return cartProduct.productId.toString() === product._id.toString();
+    });
+    let updatedCartItems =  [...this.cart.items];
+    let newQuantity = 1;
+
+    if(cartProductIndex > -1) {
+        newQuantity = this.cart.items[cartProductIndex].quantity + 1;
+        updatedCartItems[cartProductIndex].quantity = newQuantity;
+    } else {
+        updatedCartItems.push({
+            productId: product._id,
+            quantity: newQuantity
+        });
+    }
+    const updatedCart = { items: updatedCartItems };
+    this.cart = updatedCart;
+    return this.save();
+};
+
 
 module.exports = mongoose.model('User', UserSchema);
 // const { getDb } = require('../util/database');

@@ -39,13 +39,12 @@ const getIndexPage = (req, res, next) => {
 };
 
 const getCartPage = (req, res, next) => {
-    req.user.getCart()
-    .then(cartProducts => {
-        console.log(cartProducts);
+    req.user.populate('cart.items.productId').execPopulate()
+    .then(user => {
         res.render('shop/cart', {
             pageTitle: 'Cart',
             path: '/cart',
-            cartProducts
+            cartProducts: user.cart.items
         });
     });
     // Cart.showCart(cart => {
@@ -100,7 +99,7 @@ const postOrder = (req, res, next) => {
 
 const postCartPage = (req, res, next) => {
     const prodId = req.body.productId;
-    Product.findProduct(prodId)
+    Product.findById(prodId)
         .then(product => {
             return req.user.addToCart(product);
         }).then(_ => res.redirect('/cart'))

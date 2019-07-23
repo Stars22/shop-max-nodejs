@@ -1,5 +1,5 @@
 const Product = require('../models/product');
-const Cart = require('../models/cart-file');
+const Order = require('../models/order');
 
 const getProductsPage = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
@@ -93,8 +93,21 @@ const getCheckoutPage = (req, res, next) => {
 };
 
 const postOrder = (req, res, next) => {
-    req.user.addOrder()
-    .then(_ => res.redirect('/orders'));
+    req.user.populate('cart.items.productId').execPopulate()
+        .then(user => {
+            const products = user.cart.items.map(prod => {
+                return { product: prod.productId, quantity: prod.quantity };
+            });
+            const order = new Order({
+                products,
+                user: { userId: user._id }
+            });
+            return order.save();
+        })
+        .then(_ => res.redirect('/orders'));
+    
+    // req.user.addOrder()
+    // .then(_ => res.redirect('/orders'));
 };
 
 const postCartPage = (req, res, next) => {

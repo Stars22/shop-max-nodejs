@@ -9,6 +9,7 @@ const getProductsPage = (req, res, next) => {
             products,
             pageTitle: 'All products',
             path: '/products',
+            isAuthenticated: req.isAuthenticated
         });
     })
     .catch(err => console.log(err));
@@ -21,7 +22,8 @@ const getProductPage = (req, res, next) => {
         res.render('shop/product-detail', {
             product,
             pageTitle: product.title,
-            path: '/products' 
+            path: '/products',
+            isAuthenticated: req.isAuthenticated
         });
     });
 };
@@ -33,6 +35,7 @@ const getIndexPage = (req, res, next) => {
             products,
             pageTitle: 'Max shop',
             path: '/',
+            isAuthenticated: req.isAuthenticated
         });
     })
     .catch(err => console.log(err));
@@ -44,7 +47,8 @@ const getCartPage = (req, res, next) => {
         res.render('shop/cart', {
             pageTitle: 'Cart',
             path: '/cart',
-            cartProducts: user.cart.items
+            cartProducts: user.cart.items,
+            isAuthenticated: req.isAuthenticated
         });
     });
     // Cart.showCart(cart => {
@@ -80,7 +84,8 @@ const getOrdersPage = (req, res, next) => {
             res.render('shop/orders', {
                 pageTitle: 'Orders',
                 path: '/orders',
-                orders
+                orders,
+                isAuthenticated: req.isAuthenticated
             });
         });
 };
@@ -89,6 +94,7 @@ const getCheckoutPage = (req, res, next) => {
     res.render('shop/checkout', {
         pageTitle: 'Checkout',
         path: '/checkout',
+        isAuthenticated: req.isAuthenticated
     });
 };
 

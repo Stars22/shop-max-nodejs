@@ -1,6 +1,5 @@
 exports.getLoginPage = (req, res, next) => {
     // const isAuthenticated = req.get('Cookie').split('=')[1] === 'true';
-    console.log(req.session);
     res.render('auth/login', {
         pageTitle: 'Login',
         path: '/login',

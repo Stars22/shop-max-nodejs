@@ -3,10 +3,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 require('dotenv').config();
 //const handleBars = require('express-handlebars');
 
 const app = express();
+const sessionStore = new MongoStore({url: process.env.API_URL, collection: 'sessionz'});
 
 const errorController = require('./controllers/errors');
 
@@ -26,7 +28,7 @@ app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({secret: 'secret phrase', resave: false, saveUninitialized: false}));
+app.use(session({secret: 'secret phrase', resave: false, saveUninitialized: false, store: sessionStore}));
 
 app.use((req, res, next) => {
     User.findById('5d3605c2844db81668aa3d5f')

@@ -28,7 +28,7 @@ app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({secret: 'secret phrase', resave: false, saveUninitialized: false, store: sessionStore}));
+app.use(session({secret: 'secret phrase', resave: false, saveUninitialized: false, store: sessionStore, name: 'vasya'}));
 
 app.use((req, res, next) => {
     User.findById('5d3605c2844db81668aa3d5f')

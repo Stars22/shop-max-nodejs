@@ -9,7 +9,7 @@ const getProductsPage = (req, res, next) => {
             products,
             pageTitle: 'All products',
             path: '/products',
-            isAuthenticated: req.isAuthenticated
+            isAuthenticated: req.session.isLoggedin
         });
     })
     .catch(err => console.log(err));
@@ -23,7 +23,7 @@ const getProductPage = (req, res, next) => {
             product,
             pageTitle: product.title,
             path: '/products',
-            isAuthenticated: req.isAuthenticated
+            isAuthenticated: req.session.isLoggedin
         });
     });
 };
@@ -35,7 +35,7 @@ const getIndexPage = (req, res, next) => {
             products,
             pageTitle: 'Max shop',
             path: '/',
-            isAuthenticated: req.isAuthenticated
+            isAuthenticated: req.session.isLoggedin
         });
     })
     .catch(err => console.log(err));
@@ -48,7 +48,7 @@ const getCartPage = (req, res, next) => {
             pageTitle: 'Cart',
             path: '/cart',
             cartProducts: user.cart.items,
-            isAuthenticated: req.isAuthenticated
+            isAuthenticated: req.session.isLoggedin
         });
     });
     // Cart.showCart(cart => {
@@ -85,7 +85,7 @@ const getOrdersPage = (req, res, next) => {
                 pageTitle: 'Orders',
                 path: '/orders',
                 orders,
-                isAuthenticated: req.isAuthenticated
+                isAuthenticated: req.session.isLoggedin
             });
         });
 };
@@ -94,7 +94,7 @@ const getCheckoutPage = (req, res, next) => {
     res.render('shop/checkout', {
         pageTitle: 'Checkout',
         path: '/checkout',
-        isAuthenticated: req.isAuthenticated
+        isAuthenticated: req.session.isLoggedin
     });
 };
 

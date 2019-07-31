@@ -12,3 +12,7 @@ exports.postLogin = (req, res, next) => {
     res.setHeader('Set-Cookie', 'loggedIn=true');
     res.redirect('/');
 };
+
+exports.postLogout = (req, res) => {
+    req.session.destroy(() => res.redirect('/'));
+}

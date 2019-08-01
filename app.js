@@ -31,7 +31,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret: 'secret phrase', resave: false, saveUninitialized: false, store: sessionStore, name: 'vasya'}));
 
 app.use((req, res, next) => {
-    User.findById('5d3605c2844db81668aa3d5f')
+    if(!req.session.user) {
+        return next();
+    }
+    User.findById(req.session.user._id)
         .then(user => {
             req.user = user;
             next();

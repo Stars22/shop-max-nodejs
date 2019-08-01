@@ -51,19 +51,6 @@ app.use(errorController.get404Page);
 //     app.listen(3000);
 // });
 mongoose.connect(process.env.API_URL,  { useNewUrlParser: true })
-    .then(_ => {
-        User.findOne()
-            .then(user => {
-                if(!user) {
-                    const user = new User({
-                        name: 'Ace',
-                        email: 'mail@gmail.com',
-                        cart: { items: []}
-                    });
-                    user.save();
-                }
-                app.listen(3000);
-            });
-    })
+    .then(_ => app.listen(3000))
     .catch(err => console.log(err));
 

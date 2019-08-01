@@ -3,11 +3,11 @@ const Schema = mongoose.Schema;
 const Product = require('../models/product');
 
 const UserSchema = new Schema({
-    name: {
+    email: {
         type: String,
         required: true
     },
-    email: {
+    password: {
         type: String,
         required: true
     },

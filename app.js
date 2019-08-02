@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const csrf = require('csurf')();
 require('dotenv').config();
 //const handleBars = require('express-handlebars');
 
@@ -29,6 +30,8 @@ app.set('views', 'views');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret: 'secret phrase', resave: false, saveUninitialized: false, store: sessionStore, name: 'vasya'}));
+//csrf uses session so we add it after session
+app.use(csrf);
 
 app.use((req, res, next) => {
     if(!req.session.user) {

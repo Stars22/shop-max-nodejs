@@ -68,7 +68,6 @@ exports.getProductsPage = (req, res, next) => {
     //.select('title price -id') filtering fields space separated (minus for excluding field)
     .populate('user')
     .then(products => {
-        console.log('products: ', products[0].user.name);
         res.render('admin/products', {
             products,
             pageTitle: 'Admin products',

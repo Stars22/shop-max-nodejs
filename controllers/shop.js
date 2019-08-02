@@ -8,8 +8,7 @@ const getProductsPage = (req, res, next) => {
         res.render('shop/product-list', {
             products,
             pageTitle: 'All products',
-            path: '/products',
-            isAuthenticated: req.session.isLoggedin
+            path: '/products'
         });
     })
     .catch(err => console.log(err));
@@ -22,8 +21,7 @@ const getProductPage = (req, res, next) => {
         res.render('shop/product-detail', {
             product,
             pageTitle: product.title,
-            path: '/products',
-            isAuthenticated: req.session.isLoggedin
+            path: '/products'
         });
     });
 };
@@ -46,8 +44,7 @@ const getCartPage = (req, res, next) => {
         res.render('shop/cart', {
             pageTitle: 'Cart',
             path: '/cart',
-            cartProducts: user.cart.items,
-            isAuthenticated: req.session.isLoggedin
+            cartProducts: user.cart.items
         });
     });
     // Cart.showCart(cart => {
@@ -84,7 +81,6 @@ const getOrdersPage = (req, res, next) => {
                 pageTitle: 'Orders',
                 path: '/orders',
                 orders,
-                isAuthenticated: req.session.isLoggedin
             });
         });
 };
@@ -92,8 +88,7 @@ const getOrdersPage = (req, res, next) => {
 const getCheckoutPage = (req, res, next) => {
     res.render('shop/checkout', {
         pageTitle: 'Checkout',
-        path: '/checkout',
-        isAuthenticated: req.session.isLoggedin
+        path: '/checkout'
     });
 };
 

@@ -34,8 +34,7 @@ const getIndexPage = (req, res, next) => {
         res.render('shop/index', {
             products,
             pageTitle: 'Max shop',
-            path: '/',
-            isAuthenticated: req.session.isLoggedin
+            path: '/'
         });
     })
     .catch(err => console.log(err));

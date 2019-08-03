@@ -1,5 +1,13 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const sendGrid = require('nodemailer-sendgrid-transport');
+
+const transporter = nodemailer.createTransport(sendGrid({
+    auth: {
+        api_key: process.env.API_SEND_GRID
+    }
+}));
 
 exports.getLoginPage = (req, res, next) => {
     // const isAuthenticated = req.get('Cookie').split('=')[1] === 'true';
@@ -79,7 +87,16 @@ exports.postSignup = (req, res, next) => {
                     })
                     return user.save();
                 })
-                .then(_ => res.redirect('/login'));
+                .then(_ => {
+                    res.redirect('/login');
+                    return transporter.sendMail({
+                        to: email,
+                        from: 'shop@ndoe.com',
+                        subject: 'Signup succeded',
+                        html: '<h1>You signed up</h1>'
+                    })                   
+                })
+                .catch(err => console.log(err));
         })
         .catch(err => console.log(err));
 };

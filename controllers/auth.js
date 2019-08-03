@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const sendGrid = require('nodemailer-sendgrid-transport');
 
@@ -117,4 +118,37 @@ exports.getResetPage = (req, res) => {
         pageTitle: 'Reset password',
         errorMessage: message
     });
+}
+
+exports.postReset = (req, res) => {
+    crypto.randomBytes(32, (err, buffer) => {
+        if(err) {
+            console.log(err);
+            return res.redirect('/reset');
+        }
+        const token = buffer.toString('hex');
+        User.findOne({email: req.body.email})
+            .then(user => {
+                if(!user) {
+                    res.flash('error', 'No account found');
+                    return res.redirect('/reset');
+                }
+                user.resetToken = token;
+                user.resetTokenExpire = Date.now() + 3600000;
+                return user.save()
+                    .then(result => {
+                        res.redirect('/login');
+                        return transporter.sendMail({
+                                to: req.body.email,
+                                from: 'shop@ndoe.com',
+                                subject: 'Password reset',
+                                html: `
+                                <p>You requested password reset</p>
+                                <a href="http://localhost:3000/reset/${token}">Reset password</a>
+                                `
+                            }) 
+                    });
+            })
+            .catch(err => console.log(err))
+    })
 }

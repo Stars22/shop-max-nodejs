@@ -53,13 +53,15 @@ exports.postEditProductPage = (req, res) => {
     const { title, imageUrl, price, description, id } = req.body;
     Product.findById(id)
     .then(product => {
+        if(product.userId !== req.user._id) {
+            return res.redirect('/');
+        }
         product.title = title;
         product.imageUrl = imageUrl;
         product.price = price;
         product.description = description;
-        product.save();
-    })
-    .then(_ => res.redirect('/products'));
+        product.save().then(_ => res.redirect('/products'));
+    });
 };
 
 exports.getProductsPage = (req, res, next) => {

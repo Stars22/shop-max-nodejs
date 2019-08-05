@@ -32,7 +32,8 @@ exports.getEditProductPage = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res) => {
     const prodId = req.body.id;
-    Product.findOneAndDelete(prodId)
+    //check both product id and authorized user to delete product
+    Product.deleteOne({_id: prodId, userId: req.user._id})
         .then(_ => res.redirect('/products'));
 };
 
@@ -49,11 +50,10 @@ exports.postAddProductPage = (req, res) => {
 };
 
 exports.postEditProductPage = (req, res) => {
-    console.log(req.body);
     const { title, imageUrl, price, description, id } = req.body;
     Product.findById(id)
     .then(product => {
-        if(product.userId !== req.user._id) {
+        if(!product.userId.equals(req.user._id)) {
             return res.redirect('/');
         }
         product.title = title;

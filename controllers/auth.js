@@ -73,7 +73,6 @@ exports.postLogin = (req, res, next) => {
 exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    const confirmPassword = req.body.confirmPassword;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return res.status(422)
@@ -83,13 +82,7 @@ exports.postSignup = (req, res, next) => {
                 errorMessage: errors.array()[0].msg
             });
     }
-    User.findOne({email: email})
-        .then(userDoc => {
-            if(userDoc) {
-                req.flash('error', 'The email exists already ');
-                return res.redirect('/signup');
-            }
-            return bcrypt.hash(password, 12)
+            bcrypt.hash(password, 12)
                 .then(hashedPass => {
                     const user = new User({
                         email,
@@ -108,8 +101,6 @@ exports.postSignup = (req, res, next) => {
                     })                   
                 })
                 .catch(err => console.log(err));
-        })
-        .catch(err => console.log(err));
 };
 
 exports.postLogout = (req, res) => {

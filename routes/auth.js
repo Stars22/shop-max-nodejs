@@ -13,30 +13,31 @@ router.post('/signup', [
     check('email')
         .isEmail()
         .withMessage('Please enter a vaild email')
-        .custom((value, { req }) => {
+        .custom((value) => {
            return User.findOne({email: value})
             .then(userDoc => {
                 if(userDoc) {
                     return Promise.reject('The email exists already ');
                 }
-    })}),
-    body('password', 'Please enter a password at least 6 characters').isLength({min: 6}).isAlphanumeric(),
+    })}).normalizeEmail(),
+    body('password', 'Please enter a password at least 6 characters').isLength({min: 6}).isAlphanumeric().trim(),
     body('confirmPassword').custom((value, { req }) => {
         if(value === req.body.password) {
             return true;
         }
         throw new Error('Passwords have to match!');
-    })
+    }).trim()
     ],
     authController.postSignup);
 router.post('/login', [
-    body('email').isEmail().withMessage('Please enter a vaild email'),
+    body('email').isEmail().withMessage('Please enter a vaild email')
+    .normalizeEmail(),
     // .custom(async value => {
     //     const userDoc = await User.findOne({ email: value });
     //     if(!userDoc) throw new Error('Invalid email or password');
     //     return true;
     // }),
-    body('password', 'Password has to be valid.').isLength({ min: 5 }).isAlphanumeric()
+    body('password', 'Password has to be valid.').isLength({ min: 5 }).isAlphanumeric().trim()
 ], authController.postLogin);
 router.post('/logout', authController.postLogout);
 router.post('/reset', authController.postReset);

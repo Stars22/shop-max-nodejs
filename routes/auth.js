@@ -14,10 +14,6 @@ router.post('/signup', [
         .isEmail()
         .withMessage('Please enter a vaild email')
         .custom((value, { req }) => {
-            // if(value === 'test@test.com') {
-            //     throw new Error('This email adress is forbidden');
-            // }
-            // return true;
            return User.findOne({email: value})
             .then(userDoc => {
                 if(userDoc) {
@@ -33,7 +29,15 @@ router.post('/signup', [
     })
     ],
     authController.postSignup);
-router.post('/login', authController.postLogin);
+router.post('/login', [
+    body('email').isEmail().withMessage('Please enter a vaild email'),
+    // .custom(async value => {
+    //     const userDoc = await User.findOne({ email: value });
+    //     if(!userDoc) throw new Error('Invalid email or password');
+    //     return true;
+    // }),
+    body('password', 'Password has to be valid.').isLength({ min: 5 }).isAlphanumeric()
+], authController.postLogin);
 router.post('/logout', authController.postLogout);
 router.post('/reset', authController.postReset);
 router.post('/new-password', authController.postNewPassword);

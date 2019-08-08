@@ -62,6 +62,9 @@ app.use(shopRoutes);
 app.use(authRoutes);
 app.get('/500', errorController.get500Page);
 app.use(errorController.get404Page);
+app.use((err, req, res, next) => {
+    res.redirect('/500');
+});
 
 // mongoConnect(() => {
 //     app.listen(3000);

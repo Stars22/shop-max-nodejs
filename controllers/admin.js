@@ -72,7 +72,10 @@ exports.postAddProductPage = (req, res) => {
         //     hasError: true,
         //     errorMessage: 'Database operation failed, please try again.'
         // });
-        res.redirect('/500');
+        //res.redirect('/500');
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
     });
 };
 
@@ -117,5 +120,9 @@ exports.getProductsPage = (req, res, next) => {
             hasError: false
         });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+    });
 };

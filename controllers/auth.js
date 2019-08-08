@@ -101,7 +101,11 @@ exports.postLogin = (req, res, next) => {
                     res.redirect('/login');
                 });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
 };
 
 exports.postSignup = (req, res, next) => {
@@ -137,7 +141,11 @@ exports.postSignup = (req, res, next) => {
                         html: '<h1>You signed up</h1>'
                     })                   
                 })
-                .catch(err => console.log(err));
+                .catch(err => {
+                    const error = new Error(err);
+                    error.httpStatusCode = 500;
+                    return next(error);
+                });
 };
 
 exports.postLogout = (req, res) => {
@@ -213,7 +221,11 @@ exports.getNewPassword = (req, res) => {
                 res.status(404).render('404', { pageTitle: 'Page not found', path: null, isAuthenticated: req.session.isLoggedin});
             }
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
 }
 
 exports.postNewPassword = (req, res) => {

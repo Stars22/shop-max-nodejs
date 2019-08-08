@@ -49,7 +49,7 @@ exports.postAddProductPage = (req, res) => {
     if(!errors.isEmpty()) {
         return res.status(422).render('admin/edit-product', {
             pageTitle: 'Add Product',
-            path: '/admin/edit-product',
+            path: '/admin/add-product',
             editing: false,
             product: { title, imageUrl, price, description },
             isAuthenticated: req.session.isLoggedin,
@@ -60,10 +60,20 @@ exports.postAddProductPage = (req, res) => {
     const product = new Product({ title, imageUrl, description, price, userId });
     product.save()
     .then(result => {
-        console.log('Product was created');
         res.redirect('/admin/products');
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+        // return res.status(500).render('admin/edit-product', {
+        //     pageTitle: 'Add Product',
+        //     path: '/admin/add-product',
+        //     editing: false,
+        //     product: { title, imageUrl, price, description },
+        //     isAuthenticated: req.session.isLoggedin,
+        //     hasError: true,
+        //     errorMessage: 'Database operation failed, please try again.'
+        // });
+        res.redirect('/500');
+    });
 };
 
 exports.postEditProductPage = (req, res) => {

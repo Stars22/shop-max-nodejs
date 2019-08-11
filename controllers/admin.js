@@ -43,7 +43,8 @@ exports.postDeleteProduct = (req, res) => {
 };
 
 exports.postAddProductPage = (req, res) => {
-    const { title, image, price, description} = req.body;
+    const { title, price, description} = req.body;
+    const image =req.file;
     const userId = req.user._id;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
@@ -80,7 +81,8 @@ exports.postAddProductPage = (req, res) => {
 };
 
 exports.postEditProductPage = (req, res) => {
-    const { title, image, price, description, id } = req.body;
+    const { title, price, description, id } = req.body;
+    const image =req.file;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return res.status(422).render('admin/edit-product', {

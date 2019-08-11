@@ -8,6 +8,12 @@ const csrf = require('csurf')();
 const flash = require('connect-flash');
 const multer = require('multer');
 require('dotenv').config();
+const fileStorage = multer.diskStorage({
+    destination: 'images',
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
 //const handleBars = require('express-handlebars');
 
 const app = express();
@@ -30,7 +36,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({dest: 'images'}).single('image'));
+app.use(multer({dest: 'images', storage: fileStorage}).single('image'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret: 'secret phrase', resave: false, saveUninitialized: false, store: sessionStore, name: 'vasya'}));
 //csrf uses session so we add it after session

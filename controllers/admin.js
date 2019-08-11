@@ -44,20 +44,32 @@ exports.postDeleteProduct = (req, res) => {
 
 exports.postAddProductPage = (req, res) => {
     const { title, price, description} = req.body;
-    const image =req.file;
+    const image = req.file;
     const userId = req.user._id;
     const errors = validationResult(req);
+    if(!image) {
+        return res.status(422).render('admin/edit-product', {
+            pageTitle: 'Add Product',
+            path: '/admin/add-product',
+            editing: false,
+            product: { title, price, description },
+            isAuthenticated: req.session.isLoggedin,
+            hasError: true,
+            errorMessage: 'Attached file is not an image'
+        });
+    }
     if(!errors.isEmpty()) {
         return res.status(422).render('admin/edit-product', {
             pageTitle: 'Add Product',
             path: '/admin/add-product',
             editing: false,
-            product: { title, image, price, description },
+            product: { title, price, description },
             isAuthenticated: req.session.isLoggedin,
             hasError: true,
             errorMessage: errors.array()[0].msg
         });
     }
+    const imageUrl = image.path;
     const product = new Product({ title, imageUrl, description, price, userId });
     product.save()
     .then(result => {
@@ -82,14 +94,14 @@ exports.postAddProductPage = (req, res) => {
 
 exports.postEditProductPage = (req, res) => {
     const { title, price, description, id } = req.body;
-    const image =req.file;
+    const image = req.file;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return res.status(422).render('admin/edit-product', {
             pageTitle: 'Edit Product',
             path: '/admin/edit-product',
             editing: true,
-            product: { title, image, price, description, _id: id },
+            product: { title, price, description, _id: id },
             isAuthenticated: req.session.isLoggedin,
             hasError: true,
             errorMessage: errors.array()[0].msg
@@ -101,7 +113,9 @@ exports.postEditProductPage = (req, res) => {
             return res.redirect('/');
         }
         product.title = title;
-        product.imageUrl = imageUrl;
+        if(image) {
+            product.imageUrl = image.path;
+        }
         product.price = price;
         product.description = description;
         product.save().then(_ => res.redirect('/products'));

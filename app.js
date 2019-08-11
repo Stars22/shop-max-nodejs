@@ -15,7 +15,7 @@ const fileStorage = multer.diskStorage({
     }
 });
 const fileFilter = (req, file, cb) => {
-    if(file.mimeype === 'image/jpeg' || file.mimeype === 'image/png' || file.mimeype === 'image/gif') {
+    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/gif') {
         cb(null, true);
     } else {
         cb(null, false);
@@ -45,6 +45,7 @@ app.set('views', 'views');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(multer({dest: 'images', storage: fileStorage, fileFilter}).single('image'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(session({secret: 'secret phrase', resave: false, saveUninitialized: false, store: sessionStore, name: 'vasya'}));
 //csrf uses session so we add it after session
 app.use(csrf);

@@ -14,6 +14,13 @@ const fileStorage = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname);
     }
 });
+const fileFilter = (req, file, cb) => {
+    if(file.mimeype === 'image/jpeg' || file.mimeype === 'image/png' || file.mimeype === 'image/gif') {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+}
 //const handleBars = require('express-handlebars');
 
 const app = express();
@@ -36,7 +43,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(multer({dest: 'images', storage: fileStorage}).single('image'));
+app.use(multer({dest: 'images', storage: fileStorage, fileFilter}).single('image'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({secret: 'secret phrase', resave: false, saveUninitialized: false, store: sessionStore, name: 'vasya'}));
 //csrf uses session so we add it after session

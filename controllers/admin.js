@@ -43,7 +43,7 @@ exports.postDeleteProduct = (req, res) => {
 };
 
 exports.postAddProductPage = (req, res) => {
-    const { title, imageUrl, price, description} = req.body;
+    const { title, image, price, description} = req.body;
     const userId = req.user._id;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
@@ -51,7 +51,7 @@ exports.postAddProductPage = (req, res) => {
             pageTitle: 'Add Product',
             path: '/admin/add-product',
             editing: false,
-            product: { title, imageUrl, price, description },
+            product: { title, image, price, description },
             isAuthenticated: req.session.isLoggedin,
             hasError: true,
             errorMessage: errors.array()[0].msg
@@ -80,14 +80,14 @@ exports.postAddProductPage = (req, res) => {
 };
 
 exports.postEditProductPage = (req, res) => {
-    const { title, imageUrl, price, description, id } = req.body;
+    const { title, image, price, description, id } = req.body;
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return res.status(422).render('admin/edit-product', {
             pageTitle: 'Edit Product',
             path: '/admin/edit-product',
             editing: true,
-            product: { title, imageUrl, price, description, _id: id },
+            product: { title, image, price, description, _id: id },
             isAuthenticated: req.session.isLoggedin,
             hasError: true,
             errorMessage: errors.array()[0].msg

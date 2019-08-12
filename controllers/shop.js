@@ -1,5 +1,7 @@
 const Product = require('../models/product');
 const Order = require('../models/order');
+const fs = require('fs');
+const path = require('path');
 
 const getProductsPage = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
@@ -92,6 +94,18 @@ const getCheckoutPage = (req, res, next) => {
     });
 };
 
+const getInvoice = (req, res, next) => {
+    const orderId = req.params.orderId;
+    const invoiceFile = 'invoice' + orderId + '.pdf';
+    const invoicePath = path.join('data', 'invoices', invoiceFile);
+    fs.readFile(invoicePath, (err, data) => {
+        if(err) return next(err);
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename="' + invoiceName + '"');
+        res.send(data);
+    });
+}
+
 const postOrder = (req, res, next) => {
     req.user.populate('cart.items.productId').execPopulate()
         .then(user => {
@@ -136,6 +150,7 @@ module.exports = {
     getCartPage,
     getCheckoutPage,
     getOrdersPage,
+    getInvoice,
     postCartPage,
     postCartDeleteProduct,
     postOrder

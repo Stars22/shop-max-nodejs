@@ -8,15 +8,39 @@ const ITEMS_PER_PAGE = 2;
 
 const getProductsPage = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-    Product.find()
-    .then(products => {
-        res.render('shop/product-list', {
-            products,
-            pageTitle: 'All products',
-            path: '/products'
-        });
-    })
-    .catch(err => console.log(err));
+    // Product.find()
+    // .then(products => {
+    //     res.render('shop/product-list', {
+    //         products,
+    //         pageTitle: 'All products',
+    //         path: '/products'
+    //     });
+    // })
+    // .catch(err => console.log(err));
+    let page = Number(req.query.page) || 1;
+    let totalProducts;
+    Product.find().countDocuments()
+        .then(numProducts => {
+            totalProducts = numProducts;
+            return Product.find()
+            .skip((page - 1) * ITEMS_PER_PAGE)
+            .limit(ITEMS_PER_PAGE)
+        })
+        .then(products => {
+            res.render('shop/product-list', {
+                products,
+                pageTitle: 'All products',
+                path: '/products',
+                totalProducts,
+                hasNextPage: ITEMS_PER_PAGE * page < totalProducts,
+                hasPreviousPage: page > 1,
+                nextPage: page + 1,
+                previousPage: page - 1,
+                lastPage: Math.ceil(totalProducts / ITEMS_PER_PAGE),
+                currentPage: page
+            });
+        })
+        .catch(err => console.log(err));
 };
 
 const getProductPage = (req, res, next) => {

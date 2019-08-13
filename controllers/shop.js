@@ -130,9 +130,23 @@ const getOrdersPage = (req, res, next) => {
 };
 
 const getCheckoutPage = (req, res, next) => {
-    res.render('shop/checkout', {
-        pageTitle: 'Checkout',
-        path: '/checkout'
+    req.user.populate('cart.items.productId').execPopulate()
+    .then(user => {
+        const products = user.cart.items;
+        let total = 0;
+        products.forEach( prod => {
+            total += prod.quantity * prod.productId.price;
+        });
+        console.log(total);
+        res.render('shop/checkout', {
+            pageTitle: 'Checkout',
+            path: '/checkout',
+            products,
+            totalSum: total
+        });
+    })
+    .catch(err => {
+        return next(err);
     });
 };
 

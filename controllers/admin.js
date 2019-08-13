@@ -36,16 +36,16 @@ exports.getEditProductPage = (req, res, next) => {
     });
 };
 
-exports.postDeleteProduct = (req, res) => {
-    const prodId = req.body.id;
+exports.deleteProduct = (req, res, next) => {
+    const prodId = req.params.productId;
     Product.findById(prodId)
         .then(product => {
             if(!product) return next(new Error('Product not found.'))
             fileHelper.deleteFile(product.imageUrl);
             return Product.deleteOne({_id: prodId, userId: req.user._id})
         })
-        .then(_ => res.redirect('/products'))
-        .catch(err => next(err));
+        .then(_ => res.status(200).json({message: 'Success'}))
+        .catch(err => res.status(500).json({message: err}));
     //check both product id and authorized user to delete product
 };
 

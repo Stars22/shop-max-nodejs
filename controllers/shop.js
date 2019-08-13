@@ -32,11 +32,8 @@ const getProductPage = (req, res, next) => {
 };
 
 const getIndexPage = (req, res, next) => {
-    let page = req.query.page;
+    let page = Number(req.query.page) || 1;
     let totalProducts;
-    if(!page) {
-        page = 1;
-    }
     Product.find().countDocuments()
         .then(numProducts => {
             totalProducts = numProducts;
@@ -51,10 +48,11 @@ const getIndexPage = (req, res, next) => {
                 path: '/',
                 totalProducts,
                 hasNextPage: ITEMS_PER_PAGE * page < totalProducts,
-                hasPreviosPage: page > 1,
+                hasPreviousPage: page > 1,
                 nextPage: page + 1,
-                hasPreviosPage: page -1,
-                lastPage: Math.ceil(totalProducts / ITEMS_PER_PAGE)
+                previousPage: page - 1,
+                lastPage: Math.ceil(totalProducts / ITEMS_PER_PAGE),
+                currentPage: page
             });
         })
         .catch(err => console.log(err));

@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const PDFDocument = require('pdfkit');
 
+const ITEMS_PER_PAGE = 2;
+
 const getProductsPage = (req, res, next) => {
     // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
     Product.find()
@@ -30,15 +32,32 @@ const getProductPage = (req, res, next) => {
 };
 
 const getIndexPage = (req, res, next) => {
-    Product.find()
-    .then(products => {
-        res.render('shop/index', {
-            products,
-            pageTitle: 'Max shop',
-            path: '/'
-        });
-    })
-    .catch(err => console.log(err));
+    let page = req.query.page;
+    let totalProducts;
+    if(!page) {
+        page = 1;
+    }
+    Product.find().countDocuments()
+        .then(numProducts => {
+            totalProducts = numProducts;
+            return Product.find()
+            .skip((page - 1) * ITEMS_PER_PAGE)
+            .limit(ITEMS_PER_PAGE)
+        })
+        .then(products => {
+            res.render('shop/index', {
+                products,
+                pageTitle: 'Max shop',
+                path: '/',
+                totalProducts,
+                hasNextPage: ITEMS_PER_PAGE * page < totalProducts,
+                hasPreviosPage: page > 1,
+                nextPage: page + 1,
+                hasPreviosPage: page -1,
+                lastPage: Math.ceil(totalProducts / ITEMS_PER_PAGE)
+            });
+        })
+        .catch(err => console.log(err));
 };
 
 const getCartPage = (req, res, next) => {
